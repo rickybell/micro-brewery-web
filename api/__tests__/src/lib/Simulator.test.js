@@ -17,6 +17,7 @@ describe('Simulator', () => {
     });
     describe('export', () => {
       it('should change values of containers inside the truck.', () => {
+        // console.log(simulator.truck);
         expect(simulator.export()).toEqual(mocks.truckExported);
       });
     });

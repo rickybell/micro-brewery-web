@@ -24,16 +24,4 @@ export default class MicroODM {
   export() {
     return JSON.stringify(this.document);
   }
-
-  status() {
-    return !this.over() && !this.under();
-  }
-
-  over() {
-    return this.tempature > this.max;
-  }
-
-  under() {
-    return this.tempature < this.min;
-  }
 }
