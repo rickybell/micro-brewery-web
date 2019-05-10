@@ -3,6 +3,7 @@
 export default class MicroODM {
   constructor(document = {}) {
     document.type = this.constructor.name.toLowerCase();
+    document.name = this.constructor.name;
     this.document = document;
 
     if (!this.document._id) this.document._id = Math.random().toString();

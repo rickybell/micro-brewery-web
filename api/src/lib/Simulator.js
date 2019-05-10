@@ -1,26 +1,30 @@
 import MicroODM from './MicroODM';
 import crypto from 'crypto';
-import  * as constants from './../constants'
-import { PilsnerContainer, StoutContainer,IPAContainer, LargerContainer,WheatBeerContainer, PaleAleContainer } from '../odms';
-
+import * as constants from './../constants';
+import {
+  PilsnerContainer,
+  StoutContainer,
+  IPAContainer,
+  LargerContainer,
+  WheatBeerContainer,
+  PaleAleContainer
+} from '../odms';
+import * as mocks from './../../__mocks__';
 
 export default class Simulator extends MicroODM {
   export() {
-    return this.truck.export();
+    return JSON.stringify(this.truck);
   }
 
-  fillFakeValues (container) {
-    const saltTempature = Math.floor((this.randomValueByCrypto(1) * 2) * 0.1)
-    const upDown = Math.floor((this.randomValueByCrypto(1) * 2) * 0.1) === 1
-    const tempature = (upDown ? container.max : container.min) + ((saltTempature) * (upDown ? -1 : 1))
-    container.tempature = tempature > 0 ? tempature * -1 : tempature
-    return container
+  fillFakeValues(container) {
+    const saltTempature = Math.floor(this.randomValueByCrypto(1) * 2 * 0.1);
+    const upDown = Math.floor(this.randomValueByCrypto(1) * 2 * 0.1) === 1;
+    const tempature = (upDown ? container.max : container.min) + saltTempature * (upDown ? -1 : 1);
+    container.tempature = tempature > 0 ? tempature * -1 : tempature;
+    return container;
   }
 
   starting() {
-
-    console.log('this', this)
-    
     const beerSelection = [
       constants.PILSNER_CONTAINER,
       constants.STOUT_CONTAINER,
@@ -30,11 +34,12 @@ export default class Simulator extends MicroODM {
       constants.PALEALE_CONTAINER,
       constants.NUMBER_OF_CONTAINERS
     ];
-    
-    for (let index = 0; index <= constants.NUMBER_OF_CONTAINERS; index++) {      
-      const index = Math.floor((this.randomValueByCrypto(1) * 6) * 0.1) - 1;
+
+    for (let index = 0; index < constants.NUMBER_OF_CONTAINERS; index++) {
+      const index = Math.floor(this.randomValueByCrypto(1) * 6 * 0.1) - 1;
       switch (beerSelection[index]) {
         case constants.PILSNER_CONTAINER:
+          console.log(typeof this.truck.containers);
           this.truck.containers.add(this.fillFakeValues(new PilsnerContainer({})));
           break;
         case constants.STOUT_CONTAINER:
@@ -71,42 +76,36 @@ export default class Simulator extends MicroODM {
     const generatedRandomValue = Math.floor(Math.random() * (min - max + 1)) + min;
     if (container.status) {
       let randomNumber = this.randomValueByCrypto(1);
-      console.log(
-        'UpDown',
-        randomNumber > 5,
-        Math.random(),
-        Math.random() > 0.5,
-        Math.random() * [true, false].length + 1,
-        Math.floor(Math.random() * [true, false].length + 1)
-      );
+      // console.log(
+      //   'UpDown',
+      //   randomNumber > 5,
+      //   Math.random(),
+      //   Math.random() > 0.5,
+      //   Math.random() * [true, false].length + 1,
+      //   Math.floor(Math.random() * [true, false].length + 1)
+      // );
       if (randomNumber > 5) {
-        console.log('1', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature += generatedRandomValue;
       } else {
-        console.log('2', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature -= generatedRandomValue;
       }
     }
     if (container.under()) {
       if (generatedRandomValue > 0) {
-        console.log('3', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature -= generatedRandomValue;
       } else {
-        console.log('4', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature += generatedRandomValue;
       }
     }
     if (container.over()) {
       if (generatedRandomValue > 0) {
-        console.log('5', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature += generatedRandomValue;
       } else {
-        console.log('6', generatedRandomValue);
         // eslint-disable-next-line no-param-reassign
         container.tempature -= generatedRandomValue;
       }
@@ -115,6 +114,7 @@ export default class Simulator extends MicroODM {
   }
 
   execute() {
+    console.log('Simulator truck', this.truck);
     const { containers } = this.truck;
     return containers.map(container => {
       return this.randofyTempature(container);

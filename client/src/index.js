@@ -12,12 +12,9 @@ ReactDOM.render(<App />, document.getElementById("root"));
 serviceWorker.unregister();
 
 /**
- * @todo create Simulator start method
  * @todo context flow
- * @todo Main component
  * @todo Card component
  * @todo Status component
  * @todo create frontend Status component
  * @todo create axio test on frontend
- * @todo
  */

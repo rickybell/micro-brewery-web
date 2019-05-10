@@ -2,6 +2,12 @@
 import Container from '../../../src/lib/Container';
 
 describe('Container', () => {
+  describe('name', () => {
+    it('should name be equal the Constructor.', () => {
+      const container = new Container({ tempature: -5, max: -4, min: -6 });
+      expect(container.name).toEqual('Container');
+    });
+  });
   describe('status', () => {
     describe('inside tempature', () => {
       it('should be between max and min tempature.', () => {

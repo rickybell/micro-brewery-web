@@ -2,7 +2,12 @@ import MicroODM from './MicroODM';
 
 export default class Container extends MicroODM {
   constructor(document) {
-    const nestedProperty = { tempature: 0, max: 0, min: 0, status: false };
+    const nestedProperty = {
+      tempature: 0,
+      max: 0,
+      min: 0,
+      status: false
+    };
     const newdocument = {
       ...{
         get: (obj, prop) => {

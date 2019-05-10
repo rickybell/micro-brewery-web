@@ -1,0 +1,41 @@
+.Status {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+  flex-direction: row;
+  columns: 3 auto;
+}
+.StatusColumn {
+  /* min-height: 30px; */
+  /* height: 50px; */
+  /* flex-direction: "column"; */
+  display: "flex";
+  justify-content: "center";
+  flex-direction: "column";
+  align-items: center;
+  padding: 0px;
+  margin: 0px;
+}
+
+.BallStatus {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+}
+.BallRed {
+  background-color: red;
+}
+.BallGreen {
+  background-color: green;
+}
+p {
+  padding: 0px;
+  margin: 5px;
+  text-align: center;
+}
+
+/* style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column"
+          }} */
