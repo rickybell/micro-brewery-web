@@ -6,10 +6,7 @@ export default class Container extends MicroODM {
     const newdocument = {
       ...{
         get: (obj, prop) => {
-          // console.log('property', prop);
           if (prop === 'status') {
-            // eslint-disable-next-line dot-notation
-            // console.log('status property', obj['tempature'], obj['min'], obj['max']);
             // eslint-disable-next-line dot-notation
             return !(obj['tempature'] < obj['min'] || obj['tempature'] > obj['max']);
           }
@@ -22,11 +19,6 @@ export default class Container extends MicroODM {
     Object.keys(nestedProperty).forEach(prop => {
       newdocumentProxy[prop] = document[prop] || nestedProperty[prop];
     });
-    // newdocumentProxy.tempature = document.tempature || 0;
-    // newdocumentProxy.max = document.max || 0;
-    // newdocumentProxy.min = document.min || 0;
-    // newdocumentProxy.status = document.status || false;
-
     super(newdocumentProxy);
   }
 
