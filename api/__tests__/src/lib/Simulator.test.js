@@ -17,7 +17,6 @@ describe('Simulator', () => {
     });
     describe('export', () => {
       it('should change values of containers inside the truck.', () => {
-        // console.log(simulator.truck);
         expect(simulator.export()).toEqual(mocks.truckExported);
       });
     });
@@ -86,10 +85,22 @@ describe('Simulator', () => {
         });
       });
     });
-    describe('execute', () => {
-      it("should apply 'randofyTempature' for all containers.", () => {
-        simulator.execute();
-        expect(simulator.export()).toEqual(mocks.simulatedContainers);
+    describe('random', () => {
+      it("should always generate new values to tempature.", () => {
+        
+        const firstCurrentTempature = simulator.truck.containers.setOfItems[0].tempature
+        const secondCurrentTempature = simulator.truck.containers.setOfItems[1].tempature
+
+        let firstNewTempature = 0
+        let secondNewTempature = 0
+        
+        simulator.random();
+        
+        firstNewTempature = simulator.truck.containers.setOfItems[0].tempature
+        secondNewTempature = simulator.truck.containers.setOfItems[1].tempature
+        
+        expect(firstCurrentTempature).not.toEqual(firstNewTempature);
+        expect(secondCurrentTempature).not.toEqual(secondNewTempature);
       });
     });
   });

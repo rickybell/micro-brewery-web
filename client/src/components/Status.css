@@ -6,9 +6,6 @@
   columns: 3 auto;
 }
 .StatusColumn {
-  /* min-height: 30px; */
-  /* height: 50px; */
-  /* flex-direction: "column"; */
   display: "flex";
   justify-content: "center";
   flex-direction: "column";
@@ -17,25 +14,8 @@
   margin: 0px;
 }
 
-.BallStatus {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-}
-.BallRed {
-  background-color: red;
-}
-.BallGreen {
-  background-color: green;
-}
-p {
+.Status p {
   padding: 0px;
   margin: 5px;
   text-align: center;
 }
-
-/* style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column"
-          }} */

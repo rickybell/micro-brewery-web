@@ -33,19 +33,18 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    this.reloadData();
-    setInterval(this.loadData, 15000);
+    console.log('componentDidMount')
+    setInterval(this.reloadData.bind(this), 5000);
   }
 
-  async reloadData() {
-    console.log("chamou aki");
+  reloadData() {
+    console.log("chamou aki", this.state.truck.containers);
     try {
       axios
         .get("http://localhost:9000/reload")
         .then(response => {
-          console.log(response.data);
           const truck = JSON.parse(response.data);
-          const { driver, containers } = truck.document;
+          const { driver, containers } = truck;
           this.setState({ driver, containers });
         })
         .catch(error => {
@@ -81,12 +80,18 @@ class Table extends Component {
   }
 
   render() {
+    let driver_name = null;
+    if (this.state.driver !== undefined) {
+      driver_name = this.state.driver.document.driver_name
+    }
+    console.log('driver_name', driver_name)
     return (
-      <div className="Main">
-        <div className="MainRow" maxLength={255}>
-          <h1 id="title">React Dynamic Table</h1>
+      <div className={"Main"}>
+        <div className={"MainRowHeader"}>
+          <div className={"Title"}><p>Micro Brewery</p></div>
+          <div className={"Driver"}><p>Driver: {driver_name}</p></div> 
         </div>
-        <div className="MainRow" maxLength={255}>
+        <div className={"MainRow"}>
           {this.renderTableData()}
         </div>
       </div>

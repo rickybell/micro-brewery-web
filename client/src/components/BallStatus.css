@@ -1,0 +1,11 @@
+.BallStatus {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+}
+.BallRed {
+  background-color: red;
+}
+.BallGreen {
+  background-color: green;
+}

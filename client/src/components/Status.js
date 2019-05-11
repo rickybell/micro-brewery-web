@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Status.css";
+import BallStatus from "./BallStatus"
 
 export default class Status extends Component {
   render() {
@@ -25,7 +26,7 @@ export default class Status extends Component {
         >
           <p>Status: {this.props.status ? "OK" : "FAIL"} </p>
           <p>
-            <div className={`BallStatus ${statusClass}`} />
+            <BallStatus status={this.props.status}/>
           </p>
         </div>
       </div>

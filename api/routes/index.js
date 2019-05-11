@@ -12,7 +12,7 @@ router.get('/', function(request, response, next) {
     response.setHeader('Content-Type', 'application/json');
     const simulator = new Simulator({
       truck: new Truck({
-        driver: new Driver({ name: 'Shane' }),
+        driver: new Driver({ driver_name: 'Shane' }),
         containers: new CollectionODM([])
       })
     });

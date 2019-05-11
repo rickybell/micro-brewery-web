@@ -17,10 +17,19 @@ export default class Simulator extends MicroODM {
   }
 
   fillFakeValues(container) {
-    const saltTempature = Math.floor(this.randomValueByCrypto(1) * 2 * 0.1);
-    const upDown = Math.floor(this.randomValueByCrypto(1) * 2 * 0.1) === 1;
-    const tempature = (upDown ? container.max : container.min) + saltTempature * (upDown ? -1 : 1);
-    container.tempature = tempature > 0 ? tempature * -1 : tempature;
+    
+    const currentTempature = container.tempature;
+    let newTempature = 0;
+    let i = 0;
+    do{
+      let saltTempature = Math.floor(this.randomValueByCrypto(1) * 4 * 0.1);
+      let upDown = Math.floor(this.randomValueByCrypto(1) * 1.543 * 0.1) === 1;
+      newTempature = (upDown ? container.max : container.min) + saltTempature * (upDown ? -1 : 1);
+      i++;
+    }while(newTempature === currentTempature || i < 5)
+    
+    container.tempature = newTempature > 0 ? newTempature * -1 : newTempature;
+    
     return container;
   }
 
@@ -71,59 +80,51 @@ export default class Simulator extends MicroODM {
 
   // eslint-disable-next-line class-methods-use-this
   randofyTempature(container) {
-    const min = 1;
-    const max = 3;
-    const generatedRandomValue = Math.floor(Math.random() * (min - max + 1)) + min;
-    if (container.status) {
-      let randomNumber = this.randomValueByCrypto(1);
-      // console.log(
-      //   'UpDown',
-      //   randomNumber > 5,
-      //   Math.random(),
-      //   Math.random() > 0.5,
-      //   Math.random() * [true, false].length + 1,
-      //   Math.floor(Math.random() * [true, false].length + 1)
-      // );
-      if (randomNumber > 5) {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature += generatedRandomValue;
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature -= generatedRandomValue;
-      }
-    }
-    if (container.under()) {
-      if (generatedRandomValue > 0) {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature -= generatedRandomValue;
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature += generatedRandomValue;
-      }
-    }
-    if (container.over()) {
-      if (generatedRandomValue > 0) {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature += generatedRandomValue;
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        container.tempature -= generatedRandomValue;
-      }
-    }
-    return container;
+    // const min = 1;
+    // const max = 3;
+    // const generatedRandomValue = Math.floor(Math.random() * (min - max + 1)) + min;
+    // if (container.status) {
+    //   let randomNumber = this.randomValueByCrypto(1);
+    //   if (randomNumber > 5) {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature += generatedRandomValue;
+    //   } else {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature -= generatedRandomValue;
+    //   }
+    // }
+    // if (container.under()) {
+    //   if (generatedRandomValue > 0) {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature -= generatedRandomValue;
+    //   } else {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature += generatedRandomValue;
+    //   }
+    // }
+    // if (container.over()) {
+    //   if (generatedRandomValue > 0) {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature += generatedRandomValue;
+    //   } else {
+    //     // eslint-disable-next-line no-param-reassign
+    //     container.tempature -= generatedRandomValue;
+    //   }
+    // }
+    return this.fillFakeValues(container);
   }
 
-  execute() {
-    console.log('Simulator truck', this.truck);
-    const { containers } = this.truck;
-    return containers.map(container => {
+  random() {
+    let containers = this.truck.document.containers.setOfItems.map(container => {
       return this.randofyTempature(container);
     });
+    this.truck.document.containers.setOfItems = containers;
+    return this.truck;
   }
 
   run() {
-    if (this.truck.containers instanceof Array) {
-      this.execute();
+    if (this.truck.containers.setOfItems instanceof Array) {
+      this.random();
     }
   }
 }
