@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import "./Main.css";
-import { Card, CardBody } from "react-simple-card";
-import CardBeer from "./CardBeer";
+import List from "./List";
+export const TruckContext = React.createContext('truck')
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -11,14 +11,14 @@ class Table extends Component {
     };
   }
 
-  callAPI() {
+  async getApiData() {
     try {
-      axios
+      return axios
         .get("http://localhost:9000/")
         .then(response => {
           const truck = JSON.parse(response.data);
           const { driver, containers } = truck.document;
-          this.setState({ driver, containers });
+          return { driver, containers };
         })
         .catch(error => {
           throw error;
@@ -28,17 +28,18 @@ class Table extends Component {
     }
   }
 
-  componentWillMount() {
-    this.callAPI();
+  async componentWillMount () {
+    this.getApiData().then((result) =>{
+      const {driver, containers} = result
+      this.setState({ driver , containers });
+    })
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     setInterval(this.reloadData.bind(this), 5000);
   }
 
   reloadData() {
-    console.log("chamou aki", this.state.truck.containers);
     try {
       axios
         .get("http://localhost:9000/reload")
@@ -55,48 +56,77 @@ class Table extends Component {
     }
   }
 
-  renderTableData() {
-    if (this.state.containers !== undefined) {
-      return this.state.containers.setOfItems.map((container, index) => {
-        const { name, tempature, max, min, status } = container.document;
-        return (
-          <CardBeer
-            key={index}
-            name={name}
-            tempature={tempature}
-            min={min}
-            max={max}
-            status={status}
-          />
-        );
-      });
-    } else {
-      return (
-        <Card key={0}>
-          <CardBody>{"waiting"}</CardBody>
-        </Card>
-      );
-    }
-  }
-
   render() {
     let driver_name = null;
     if (this.state.driver !== undefined) {
       driver_name = this.state.driver.document.driver_name
     }
-    console.log('driver_name', driver_name)
+    const contextValues = {
+      driver: this.state.driver,
+      containers: this.state.containers
+    }
     return (
-      <div className={"Main"}>
-        <div className={"MainRowHeader"}>
-          <div className={"Title"}><p>Micro Brewery</p></div>
-          <div className={"Driver"}><p>Driver: {driver_name}</p></div> 
+      <TruckContext.Provider value={contextValues} >
+        <div style={main}>
+          <div style={mainRowHeader}>
+            <div style={headerCell}><p style={title}>Micro Brewery</p></div>
+            <div style={{ ...headerCell, ...driver}}>
+              <p style={driverText}>Driver: {driver_name}</p>
+            </div> 
+          </div>
+          <div>
+            <List />
+          </div>
         </div>
-        <div className={"MainRow"}>
-          {this.renderTableData()}
-        </div>
-      </div>
+      </TruckContext.Provider>
     );
   }
+}
+
+const main = {
+  textAlign: "center",
+  marginLeft: "20%",
+  marginRight: "20%",
+  borderWidth: "1px",
+  borderColor: "gray",
+  marginBottom: "15px",
+  borderStyle: "outset",
+  borderRadius: "15px",
+  paddingLeft: "5px",
+  paddingRight: "5px",
+  marginPop: "5px",
+  boxShadow: "1px 5px 5px grey",
+  backgroundColor: "lightgrey"
+}
+
+const mainRowHeader = {
+  display: "flex"
+}
+
+const headerCell = {
+  width: "50%"
+}
+
+const MainRowHeaderDiv = {
+  width: "50%",
+  float: "left"
+}
+const driver = {
+  textAlign: "right"
+}
+const driverText = {
+  marginTop: "30px",
+  fontSize: "18px",
+  paddingRight: "5px",
+  fontWeight: "bold"
+}
+const title = {
+  marginTop: "25px",
+  fontSize: "24px",
+  textAlign: "left",
+  fontWeight: "bold",
+  paddingLeft: "5px",
+  fontStyle: "italic",
 }
 
 export default Table;

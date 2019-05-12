@@ -11,7 +11,7 @@ import {
   Driver
 } from '../src/odms';
 
-export const importedCollection = `[{"document":{"tempature":-1,"max":-4,"min":-6,"status":false,"type":"pilsnercontainer","_id":"0.30950533601439867"}},{"document":{"tempature":0,"max":-6,"min":-8,"status":false,"type":"stoutcontainer","_id":"0.2839740785097704"}}]`;
+export const importedCollection = `[{"document":{"tempature":-1,"max":-4,"min":-6,"status":false,"type":"pilsnercontainer","name":"PilsnerContainer","_id":"0.30950533601439867"}},{"document":{"tempature":0,"max":-6,"min":-8,"status":false,"type":"stoutcontainer","name":"StoutContainer","_id":"0.2839740785097704"}}]`;
 
 global.Math.random = () => 0.3423085298899706;
 export const pilsnerContainer = new PilsnerContainer({ tempature: -5, min: -6, max: -4 });
